@@ -1,63 +1,310 @@
-# Projeto_Sistema_Controle_Patrimonial
-Projeto referente a disciplina de Sistemas Web.
+# Projeto – Sistema de Controle Patrimonial
+Projeto referente a disciplina CSI606 - Sistemas Web.
 
-SISTEMA DE CONTROLE PATRIMONIAL
-Resumo
+Projeto desenvolvido para a disciplina de Sistemas Web, com foco na construção de uma aplicação completa utilizando arquitetura cliente-servidor, autenticação segura e banco de dados relacional.
 
-O presente trabalho apresenta o desenvolvimento de um Sistema de Controle Patrimonial voltado ao gerenciamento de bens móveis de uma instituição. O sistema possibilita o registro, monitoramento e rastreabilidade de cada item desde sua aquisição até sua baixa definitiva, garantindo maior segurança, organização e transparência na gestão patrimonial. Entre suas funções principais estão o cadastro de bens, geração de plaquetas de identificação, controle de transferências entre setores, registro de empréstimos a colaboradores e baixa patrimonial. Além disso, o sistema permite consultas e relatórios detalhados, oferecendo uma interface simples e eficiente, adequada a diferentes perfis de usuários.
+# SISTEMA DE CONTROLE PATRIMONIAL
+### Resumo
 
-Palavras-chave: Patrimônio, Controle, Gestão de Ativos, Sistema.
+O presente trabalho apresenta o desenvolvimento de um Sistema Web de Controle Patrimonial, voltado ao gerenciamento de bens móveis de uma instituição.
 
-1 Tema
+O sistema permite o registro, monitoramento e rastreabilidade de cada item desde sua aquisição até sua baixa definitiva, garantindo maior segurança, organização e transparência na gestão patrimonial.
 
-O trabalho final tem como tema o desenvolvimento de um Sistema de Controle Patrimonial destinado ao gerenciamento completo de bens móveis de uma instituição, possibilitando o acompanhamento de cada item desde o cadastro até sua eventual retirada do acervo patrimonial.
+A aplicação foi desenvolvida utilizando:
 
-2 Escopo
+# Frontend: HTML5, CSS3 e JavaScript puro
 
-Este projeto contempla as seguintes funcionalidades:
+# Backend: Node.js com Express
 
-Cadastro de bens patrimoniais, com número de identificação, descrição, setor de alocação, responsável, valor e data de aquisição;
+# Banco de Dados: MySQL
 
-Geração de plaquetas com código único para identificação e rastreamento dos bens;
+# Autenticação: JWT (JSON Web Token)
 
-Transferência de bens entre setores, com geração de histórico de movimentações;
+# Criptografia de senha: bcrypt
 
-Baixa patrimonial de itens obsoletos, extraviados ou danificados, com registro de data e motivo;
+O sistema implementa controle de acesso por autenticação, separação entre frontend e backend via API REST e comunicação segura por token.
 
-Controle de empréstimos de bens para colaboradores, especialmente no contexto de home office, com registro de retirada e devolução;
+# Palavras-chave
 
-Consultas e relatórios por setor, tipo de bem, situação (ativo, emprestado, baixado) e histórico de movimentação;
+Patrimônio • Controle • Gestão de Ativos • Sistemas Web • API REST • Node.js • MySQL • JWT
 
-Interface simples e intuitiva, permitindo uso por diversos perfis de usuários.
+# 1 - Tema
 
-3 Restrições
+Desenvolvimento de um Sistema Web de Controle Patrimonial destinado ao gerenciamento completo de bens móveis de uma instituição, permitindo o acompanhamento do ciclo de vida do bem desde o cadastro até sua baixa definitiva, incluindo movimentações, empréstimos e geração de relatórios.
 
-Neste trabalho não serão considerados:
+# 2 - Tecnologias Utilizadas
 
-Integração com outros sistemas, como módulos financeiros ou sistemas governamentais;
+## Backend
 
-Controle ou histórico de manutenção técnica dos bens;
+Node.js
 
-Gestão de patrimônio imobiliário;
+Express.js
 
-Emissão de notas fiscais ou integração com processos de compras;
+MySQL
 
-Utilização de tecnologias avançadas, como Internet das Coisas (IoT), Inteligência Artificial ou armazenamento em nuvem.
+JWT (jsonwebtoken)
 
-4 Protótipo
+bcryptjs
 
-Foram elaborados protótipos das principais telas do sistema, incluindo:
+dotenv
 
-Tela de login e autenticação;
+## Frontend
 
-Tela principal do menu do sistema;
+HTML5
 
-Tela de cadastro de bens patrimoniais;
+CSS3 (layout responsivo + tema claro/escuro)
 
-Página de transferência de bens entre setores;
+JavaScript puro (ES6+)
 
-Tela de controle de empréstimos;
+Fetch API
 
-Tela de baixa patrimonial;
+Manipulação dinâmica de DOM
 
-Páginas de consulta e geração de relatórios.
+## Arquitetura
+
+API RESTful
+
+Padrão de middleware para autenticação
+
+Separação entre camadas (rotas, middleware, banco)
+
+# 3 - Funcionalidades Implementadas
+## Autenticação
+
+Login com email e senha
+
+Senha criptografada com bcrypt
+
+Geração de token JWT com expiração (8h)
+
+Middleware de proteção de rotas
+
+Controle de usuário ativo/inativo
+
+## Gestão de Bens
+
+Cadastro de bens patrimoniais com:
+
+Número de patrimônio (plaqueta)
+
+Descrição
+
+Valor de aquisição
+
+Data de aquisição
+
+Setor
+
+Responsável
+
+Edição de descrição
+
+Status automático:
+
+ATIVO
+
+EMPRESTADO
+
+BAIXADO
+
+# 🔁 Transferências
+
+Transferência de bens entre setores
+
+Alteração de responsável
+
+Registro de motivo
+
+Histórico de movimentação
+
+Validação para impedir destino igual à origem
+
+# 🤝 Empréstimos
+
+Registro de retirada de bens
+
+Registro de devolução
+
+Controle de empréstimos abertos e atrasados
+
+Atualização automática de status do bem
+
+Geração de termo de empréstimo
+
+Geração de termo de devolução
+
+# 🧯 Baixa Patrimonial
+
+Registro de baixa sem exclusão do bem
+
+Tipos de baixa:
+
+Doação
+
+Venda
+
+Sucata
+
+Extravio
+
+Inutilização
+
+Registro de data e motivo
+
+Atualização automática de status para BAIXADO
+
+Histórico preservado
+
+# 📊 Relatórios
+## ✔ Total por Status
+
+Quantidade de bens por situação
+
+## ✔ Bens em Empréstimo
+
+Lista de empréstimos abertos
+
+## ✔ Bens por Setor
+
+Filtro por setor
+
+Versão para impressão
+
+Quebra automática por setor (uma folha por setor)
+
+## ✔ Histórico do Bem
+
+Consulta por plaqueta
+
+Exibição completa de eventos:
+
+Cadastro
+
+Transferências
+
+Empréstimos
+
+Devoluções
+
+Baixa
+
+# 4 - Arquitetura da Aplicação
+## API REST
+
+A aplicação utiliza padrão REST com os seguintes métodos:
+
+GET – consultas
+
+POST – criação de registros
+
+PUT – atualização
+
+Middleware JWT protegendo rotas privadas
+
+Exemplo de header de autenticação:
+
+Authorization: Bearer <token>
+## Banco de Dados (MySQL)
+
+Principais tabelas:
+
+usuarios
+
+bens
+
+setores
+
+colaboradores
+
+emprestimos
+
+transferencias
+
+baixas
+
+historico_eventos
+
+Relacionamentos com chave estrangeira garantem integridade referencial.
+
+# 5 - Escopo do Projeto
+
+O sistema contempla:
+
+✔ Cadastro completo de bens
+✔ Controle de movimentações
+✔ Controle de empréstimos
+✔ Registro de baixa patrimonial
+✔ Relatórios detalhados
+✔ Autenticação segura
+✔ Interface web responsiva
+✔ Impressão em PDF
+
+# 6 - Restrições
+
+Não contempla:
+
+Integração com sistemas governamentais
+
+Integração financeira/contábil
+
+Controle de manutenção técnica
+
+Gestão de patrimônio imobiliário
+
+Infraestrutura em nuvem
+
+Integração com IoT ou IA
+
+# 7 - Protótipo e Telas Implementadas
+
+Tela de Login
+
+Dashboard (menu principal)
+
+Cadastro de Bens
+
+Listagem e Filtro de Bens
+
+Transferências
+
+Empréstimos
+
+Baixa Patrimonial
+
+Relatórios
+
+Relatório de impressão por setor
+
+# 8 - Segurança Implementada
+
+Senhas criptografadas com bcrypt
+
+Token JWT com expiração
+
+Middleware de autenticação
+
+Proteção de rotas privadas
+
+Validação de dados no backend
+
+Escape de HTML em relatórios dinâmicos
+
+# 9 - Conclusão
+
+O Sistema de Controle Patrimonial desenvolvido atende ao objetivo proposto na disciplina de Sistemas Web, implementando:
+
+Arquitetura cliente-servidor
+
+API REST funcional
+
+Autenticação segura
+
+Banco de dados relacional
+
+Interface dinâmica e responsiva
+
+Separação clara entre frontend e backend
+
+O projeto demonstra aplicação prática dos conceitos de desenvolvimento web, segurança, integração com banco de dados e organização estrutural de aplicações modernas.
+
+
