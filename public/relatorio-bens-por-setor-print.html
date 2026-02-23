@@ -1,0 +1,210 @@
+<!doctype html>
+<!-- 
+  Página: Relatório - Bens por Setor (Impressão)
+  Objetivo:
+  -> Gerar uma versão "print friendly" do relatório de bens agrupados por setor
+  -> Permitir imprimir ou salvar em PDF (via window.print)
+  -> Trazer dados direto da API (/relatorios/bens-por-setor) com autenticação
+  Observação:
+  Essa página é independente (não usa dashboard/menu), focada apenas em impressão.
+-->
+
+<html lang="pt-br">
+<head>
+
+   <!-- Charset para suportar acentos -->
+  <meta charset="UTF-8" />
+
+   <!-- Responsivo, mas o foco é impressão -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Relatório - Bens por Setor (Impressão)</title>   <!-- Título da aba -->
+
+  <!-- CSS padrão do sistema (botões, fontes, etc.) -->
+  <link rel="stylesheet" href="css/style.css">
+
+   <!-- Script de tema -->
+  <script src="js/theme.js"></script>
+  <style>
+     /* "Folha" centralizada */
+    .paper { max-width: 980px; margin: 24px auto; background:#0ab177; padding:24px; border:1px solid #ddd; }
+    .no-print { display:flex; gap:12px; justify-content:flex-end; margin-bottom: 12px; }
+    .setor { margin-top: 18px; page-break-inside: avoid; }
+    .setor h2 { margin: 12px 0 8px; }
+    .meta { display:flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .small { font-size: 12px; opacity:.75; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #4f1778; padding: 8px; font-size: 13px; }
+    th { text-align:left; }
+
+     /* Regras específicas do modo impressão */
+    @media print {
+      .no-print { display: none !important; } /* esconde botões */
+      .paper { border:0; margin:0; padding:0; } /* usa melhor o espaço da folha */
+      .setor { page-break-after: always; } /* cada setor em uma folha */
+      .setor:last-child { page-break-after: auto; }  /* usa melhor o espaço da folha */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================
+       "PAPEL" DO RELATÓRIO
+       ========================= -->
+  <div class="paper">
+    <div class="no-print">   <!-- Botões visíveis só na tela -->
+
+        <!-- Imprime / salva PDF -->
+      <button class="btn" onclick="window.print()">Imprimir / Salvar PDF</button>
+
+       <!-- Fecha a aba/janela -->
+      <button class="btn" onclick="window.close()">Fechar</button>
+    </div>
+
+    <!-- Cabeçalho com título e data de emissão -->
+    <div class="meta">
+      <div>
+        <h1 style="margin:0;">Relatório de Bens por Setor</h1>
+        <div class="small">Para inspeção patrimonial</div>
+      </div>
+      <div class="small">
+        Emitido em: <span id="emitidoEm"></span>
+      </div>
+    </div>
+
+    <hr/>
+
+     <!-- Conteúdo será preenchido dinamicamente via JS -->
+    <div id="conteudo"></div>
+  </div>
+
+  <script src="js/global.js"></script>  <!-- Script global: contém protegerPagina(), logout(), etc. -->
+  <script>
+    // usa a mesma base do projeto
+    if (!window.API_BASE) window.API_BASE = "http://localhost:3000/api";
+
+    function getToken() { return localStorage.getItem("token"); }
+
+    async function api(path) {
+      const r = await fetch(window.API_BASE + path, {
+        headers: { Authorization: "Bearer " + getToken() }
+      });
+      const text = await r.text();
+      let data = {};
+      try { data = JSON.parse(text); } catch { data = { raw: text }; }
+      if (!r.ok) throw new Error(data.error || ("Erro " + r.status));
+      return data;
+    }
+
+     // =========================
+    // SEGURANÇA / ESCAPE HTML
+    // =========================
+    /**
+     * Escape para evitar quebrar HTML e reduzir risco de XSS
+     * Importante porque injeta o conteúdo usando template string (innerHTML).
+     */
+    function esc(s) {
+      return String(s ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+
+    // =========================
+    // AGRUPAMENTO POR SETOR
+    // =========================
+    /**
+     * Agrupa a lista de bens por setor_nome e ordena:
+     * -> Setores em ordem alfabética
+     * -> Bens em ordem por número de patrimônio
+     */
+    function grupoPorSetor(rows) {
+      const map = new Map();
+      rows.forEach(b => {         // Cria mapa: setor -> lista de bens
+        const setor = b.setor_nome || "SEM SETOR";
+        if (!map.has(setor)) map.set(setor, []);
+        map.get(setor).push(b);
+      });
+
+      // ordena setores e bens
+      const setores = [...map.keys()].sort((a,b) => a.localeCompare(b, "pt-BR"));
+
+      // Retorna estrutura final: [{ nome, itens }]
+      return setores.map(nome => {
+        const itens = map.get(nome).sort((x,y) =>
+          String(x.numero_patrimonio).localeCompare(String(y.numero_patrimonio), "pt-BR")
+        );
+        return { nome, itens };
+      });
+    }
+
+     // =========================
+    // CARREGAR E MONTAR RELATÓRIO
+    // =========================
+    async function carregar() {
+
+      // Data/hora de emissão do relatório
+      document.getElementById("emitidoEm").textContent =
+        new Date().toLocaleString("pt-BR");
+
+      const conteudo = document.getElementById("conteudo");
+
+       // Placeholder enquanto carrega da API
+      conteudo.innerHTML = `<p class="muted">Carregando...</p>`;
+
+      // Busca todos os bens (já vem com setor e responsável no relatório)
+      const rows = await api("/relatorios/bens-por-setor");
+
+      // sem dados
+      if (!rows.length) {
+        conteudo.innerHTML = `<p>Nenhum bem encontrado.</p>`;
+        return;
+      }
+
+      // agrupa por setor
+      const grupos = grupoPorSetor(rows);
+
+      // Monta HTML do relatório
+      conteudo.innerHTML = grupos.map(g => ` 
+        <section class="setor">
+          <h2>Setor: ${esc(g.nome)} <span class="small">(Total: ${g.itens.length})</span></h2>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:160px;">Plaqueta</th>
+                <th>Descrição</th>
+                <th style="width:120px;">Status</th>
+                <th style="width:180px;">Responsável</th>
+                <th style="width:220px;">Assinatura / Conferência</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${g.itens.map(b => `
+                <tr>
+                  <td>${esc(b.numero_patrimonio)}</td>
+                  <td>${esc(b.descricao)}</td>
+                  <td>${esc(b.status)}</td>
+                  <td>${esc(b.responsavel_nome || "-")}</td>
+                  <td></td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+          <div class="small" style="margin-top:10px;">
+            Observações do setor: _________________________________________________
+          </div>
+        </section>
+      `).join("");
+    }
+
+    // =========================
+    // EXECUÇÃO
+    // =========================
+    // Protege a página de impressão também (não permite acessar sem login)
+    protegerPagina();
+    carregar().catch(err => {   // Carrega relatório e trata erro na UI
+      document.getElementById("conteudo").innerHTML =
+        `<p style="color:crimson;">Erro: ${esc(err.message)}</p>`;
+    });
+  </script>
+</body>
+</html>

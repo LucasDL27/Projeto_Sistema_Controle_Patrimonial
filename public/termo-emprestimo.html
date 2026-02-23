@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Termo de Empréstimo</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js"></script>
+  <style>
+    .paper { max-width: 800px; margin: 24px auto; background: rgb(11, 106, 46); padding: 24px; border: 1px solid #ddd; }
+    .row2 { display: flex; gap: 16px; flex-wrap: wrap; }
+    .box { flex: 1; border: 1px solid #7a1313; padding: 12px; border-radius: 8px; }
+    .muted { opacity: .75; }
+    @media print { .no-print { display: none !important; } .paper { border: 0; margin: 0; } }
+  </style>
+</head>
+<body>
+  <div class="paper">
+    <div class="no-print" style="display:flex; gap:12px; justify-content:flex-end;">
+      <button class="btn" onclick="window.print()">Imprimir / Salvar PDF</button>
+      <button class="btn" onclick="window.close()">Fechar</button>
+    </div>
+
+    <h1>TERMO DE EMPRÉSTIMO DE BEM PATRIMONIAL</h1>
+    <p class="muted" id="empresaLinha">Controle Patrimonial</p>
+    <hr/>
+
+    <h3>Dados do Bem</h3>
+    <div class="row2">
+      <div class="box"><b>Plaqueta:</b> <span id="patrimonio"></span></div>
+      <div class="box"><b>Descrição:</b> <span id="descricao"></span></div>
+    </div>
+    <div class="row2">
+      <div class="box"><b>Setor:</b> <span id="setor"></span></div>
+      <div class="box"><b>Responsável:</b> <span id="responsavel"></span></div>
+    </div>
+
+    <h3 style="margin-top:16px;">Dados do Colaborador</h3>
+    <div class="row2">
+      <div class="box"><b>Nome:</b> <span id="colaborador"></span></div>
+      <div class="box"><b>Matrícula:</b> <span id="matricula"></span></div>
+    </div>
+
+    <h3 style="margin-top:16px;">Datas</h3>
+    <div class="row2">
+      <div class="box"><b>Data de Saída:</b> <span id="data_saida"></span></div>
+      <div class="box"><b>Devolução Prevista:</b> <span id="data_prevista"></span></div>
+    </div>
+
+    <h3 style="margin-top:16px;">Declaração</h3>
+    <p>
+      Declaro que recebi o bem acima descrito em perfeito estado de conservação (salvo observações),
+      comprometendo-me a zelar, utilizar corretamente e devolver quando solicitado ou na data prevista.
+    </p>
+
+    <p><b>Observações:</b> <span id="observacoes"></span></p>
+
+    <div style="margin-top:28px;">
+      <div class="row2">
+        <div class="box" style="text-align:center; padding:24px 12px;">
+          Assinatura do Colaborador
+        </div>
+        <div class="box" style="text-align:center; padding:24px 12px;">
+          Assinatura do Responsável / Patrimônio
+        </div>
+      </div>
+      <p class="muted" style="margin-top:12px;">Emitido em: <span id="emitido_em"></span></p>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const get = (k, d="") => params.get(k) ?? d;
+
+    document.getElementById("patrimonio").textContent = get("numero_patrimonio");
+    document.getElementById("descricao").textContent = get("descricao");
+    document.getElementById("setor").textContent = get("setor_nome");
+    document.getElementById("responsavel").textContent = get("responsavel_nome");
+
+    document.getElementById("colaborador").textContent = get("colaborador_nome");
+    document.getElementById("matricula").textContent = get("matricula");
+
+    document.getElementById("data_saida").textContent = get("data_saida");
+    document.getElementById("data_prevista").textContent = get("data_prevista") || "-";
+
+    document.getElementById("observacoes").textContent = get("observacoes") || "-";
+    document.getElementById("emitido_em").textContent = new Date().toLocaleString("pt-BR");
+  </script>
+</body>
+</html>

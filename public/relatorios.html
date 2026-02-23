@@ -1,0 +1,187 @@
+<!doctype html>
+<!-- Página: Relatórios
+Objetivo:
+- Centralizar consultas e relatórios do sistema patrimonial
+Relatórios disponíveis:
+1) Total por status (ATIVO / EMPRESTADO / BAIXADO)
+2) Bens em empréstimo (em aberto/atrasado)
+3) Bens por setor (com filtro + opção de impressão)
+4) Histórico de um bem por plaqueta
+Observação:
+A lógica (fetch, render e eventos) está no arquivo js/relatorios.js
+-->
+
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+   <!-- Responsividade -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Relatórios</title>  <!-- Título da aba -->
+  <link rel="stylesheet" href="css/style.css">   <!-- CSS global do sistema -->
+  <script src="js/theme.js"></script>
+</head>
+<body>
+
+   <!-- 
+    Script global do sistema:
+    - API_BASE
+    - protegerPagina()
+    - logout()
+    - helpers comuns
+  -->
+  <script src="js/global.js"></script>
+  <script>protegerPagina();</script>  <!-- Protege a página (sem token = volta pro login) -->
+
+   <!-- =========================
+       HEADER / TOPBAR
+       ========================= -->
+  <header class="topbar">
+    <div>
+      <h1>Relatórios</h1>   <!-- Título da tela -->
+
+        <!-- Subtítulo com os módulos disponíveis -->
+      <p class="muted">Setor • Empréstimos • Status • Histórico</p>
+    </div>
+
+    <!-- Voltar para dashboard -->
+    <a class="btn" href="dashboard.html">Voltar</a>
+  </header>
+
+  <!-- =========================
+       CONTEÚDO PRINCIPAL
+       ========================= -->
+  <main class="container">
+
+     <!-- =========================
+         1) TOTAL POR STATUS
+         ========================= -->
+    <section class="card pad">
+      <h2>Total por status</h2>
+
+        <!-- Botão dispara o carregamento via JS -->
+      <button class="btn" id="btnStatus">Carregar</button>
+
+         <!-- Tabela do relatório -->
+      <table class="table">
+        <thead><tr><th>Status</th><th>Total</th></tr></thead>
+
+        <!-- Corpo preenchido dinamicamente via JS -->
+        <tbody id="tbStatus"></tbody>
+      </table>
+      <p class="muted" id="msgStatus"></p>   <!-- Mensagens/erros deste bloco -->
+    </section>
+
+     <!-- =========================
+         2) BENS EM EMPRÉSTIMO (ABERTOS)
+         ========================= -->
+    <section class="card pad">
+      <h2>Bens em empréstimo (abertos)</h2>
+      <button class="btn" id="btnEmprestimos">Carregar</button>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+
+               <!-- Campos principais do empréstimo -->
+              <th>Plaqueta</th><th>Descrição</th><th>Colaborador</th><th>Setor</th><th>Data</th><th>Prevista</th>
+            </tr>
+          </thead>
+          <tbody id="tbEmp"></tbody>
+        </table>
+      </div>
+      <p class="muted" id="msgEmp"></p>
+    </section>
+
+     <!-- =========================
+         3) BENS POR SETOR
+         ========================= -->
+    <section class="card pad">
+      <h2>Bens por setor</h2>
+
+      <!-- Linha: filtro + botões -->
+      <div class="row">
+        <div style="flex:1">
+
+          <!-- Filtro de setor carregado via JS (GET /setores) -->
+          <label>Filtrar por setor (opcional)</label>
+          <select id="setorFiltro"></select>
+        </div>
+
+        <!-- Ações do relatório por setor -->
+        <div style="align-self:end; display:flex; gap:10px;">
+
+           <!-- Carrega relatório na própria tela -->
+          <button class="btn" id="btnSetor">Carregar</button>
+
+          <!-- 
+            Abre versão de impressão em nova aba
+            (relatorio-bens-por-setor-print.html)
+          -->
+          <button class="btn" type="button"
+            onclick="window.open('relatorio-bens-por-setor-print.html','_blank')">
+            Imprimir por setor
+          </button>
+        </div>
+      </div>
+
+       <!-- Tabela do relatório por setor -->
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Plaqueta</th><th>Descrição</th><th>Status</th><th>Setor</th><th>Responsável</th>
+            </tr>
+          </thead>
+          <tbody id="tbSetor"></tbody>
+        </table>
+      </div>
+      <p class="muted" id="msgSetor"></p>
+    </section>
+
+    <!-- =========================
+         4) HISTÓRICO DO BEM
+         ========================= -->
+    <section class="card pad">
+      <h2>Histórico do bem</h2>
+
+      <!-- Campo de busca por plaqueta -->
+      <div class="row">
+        <div style="flex:1">
+          <label>Plaqueta</label>
+          <input id="plaquetaHist" placeholder="Ex: PAT-0001" />
+        </div>
+        <div style="align-self:end">  <!-- Botão de busca -->
+          <button class="btn" id="btnHist">Buscar</button>
+        </div>
+      </div>
+
+      <!-- Resumo do bem (número, descrição, status, setor, responsável) -->
+      <p class="muted" id="bemResumo"></p>
+
+       <!-- Tabela do histórico (eventos) -->
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Data</th><th>Tipo</th><th>Título</th><th>Detalhes</th></tr></thead>
+          <tbody id="tbHist"></tbody>  <!-- Preenchido via JS -->
+        </table>
+      </div>
+      <p class="muted" id="msgHist"></p> <!-- Preenchido via JS -->
+    </section>
+
+  </main>
+
+  <!-- =========================
+       MENU DINÂMICO
+       =========================
+       Carrega menu.html para reutilizar o menu em todas as páginas do sistema
+  -->
+  <script>
+    fetch("menu.html")
+      .then(r => r.text())
+      .then(html => document.body.insertAdjacentHTML("afterbegin", html));
+  </script>
+
+ <!-- Script principal da página de relatórios -->
+  <script src="js/relatorios.js"></script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!doctype html>
+<!-- 
+  Página: Dashboard - Controle Patrimonial
+  -> Servir como menu principal do sistema
+  -> Centralizar acesso a todos os módulos:
+    * Baixa
+    * Bens
+    * Cadastro
+    * Empréstimos
+    * Relatórios
+    * Transferências
+-->
+
+<html lang="pt-br">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/theme.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+   <!-- Título da aba -->
+  <title>Dashboard - Controle Patrimonial</title>
+  <link rel="nofollow" href=''>
+</head>
+<body>
+  <!-- global primeiro, mas SEMPRE dentro do body -->
+  <script src="js/global.js"></script>
+  <script>protegerPagina();</script>
+
+  <!--menu -->
+    <!--
+       Carrega menu.html automaticamente
+       Evita repetir código do menu lateral/topo em todas as páginas
+  -->
+  <script>
+    fetch("menu.html")
+      .then(r => r.text())
+      .then(html => document.body.insertAdjacentHTML("afterbegin", html));
+  </script>
+
+ <!-- =========================
+       HEADER SUPERIOR
+       ========================= -->
+  <header class="topbar">
+    <div>
+      <h1>Controle Patrimonial</h1>  <!-- Nome do sistema -->
+      <p class="muted">Menu de Opções</p>   <!-- Subtítulo -->
+    </div>
+    <button class="btn danger" id="btnSair">Sair</button>   <!-- Botão de logout -->
+  </header>
+  
+  <!-- =========================
+       CONTEÚDO PRINCIPAL
+       ========================= -->
+  <main class="container">
+
+     <!-- 
+      Grid do dashboard:
+      Cada card é um link direto para um módulo do sistema.
+    -->
+    <section class="dashboard-grid">
+  
+      <!-- Baixa -->
+      <a class="card pad dash-card" href="baixa.html">
+        <div class="dash-row">
+          <span class="ico">🧯</span>
+          <div>
+            <h2>Baixa Patrimonial</h2>
+            <p class="muted">Dar baixa por tipo e motivo (sem excluir o bem).</p>
+          </div>
+        </div>
+        <div class="dash-actions">
+          <span class="btn">Realizar Baixa</span>
+        </div>
+      </a>
+  
+      <!-- Bens -->
+      <a class="card pad dash-card" href="bens.html">
+        <div class="dash-row">
+          <span class="ico">📦</span>
+          <div>
+            <h2>Bens</h2>
+            <p class="muted">Listagem e edição dos bens patrimoniais.</p>
+          </div>
+        </div>
+        <div class="dash-actions">
+          <span class="btn">Visualizar Bens</span>
+        </div>
+      </a>
+  
+      <!-- Cadastro -->
+      <a class="card pad dash-card" href="cadastro-bens.html">
+        <div class="dash-row">
+          <span class="ico">➕</span>
+          <div>
+            <h2>Cadastrar Bem</h2>
+            <p class="muted">Registrar um novo bem no patrimônio.</p>
+          </div>
+        </div>
+        <div class="dash-actions">
+          <span class="btn primary">Cadastrar Bem</span>
+        </div>
+      </a>
+  
+      <!-- Empréstimos -->
+      <a class="card pad dash-card" href="emprestimos.html">
+        <div class="dash-row">
+          <span class="ico">🤝</span>
+          <div>
+            <h2>Empréstimos</h2>
+            <p class="muted">Registrar retirada e devolução.</p>
+          </div>
+        </div>
+        <div class="dash-actions">
+          <span class="btn">Realizar Empréstimo</span>
+        </div>
+      </a>
+  
+      <!-- Relatórios -->
+      <a class="card pad dash-card" href="relatorios.html">
+        <div class="dash-row">
+          <span class="ico">🧾</span>
+          <div>
+            <h2>Relatórios</h2>
+            <p class="muted">Por setor, empréstimos, status e histórico.</p>
+          </div>
+        </div>
+        <div class="dash-actions">
+          <span class="btn">Visualizar Relatórios</span>
+        </div>
+      </a>
+  
+      <!-- Transferências -->
+      <a class="card pad dash-card" href="transferencias.html">
+        <div class="dash-row">
+          <span class="ico">🔁</span>
+          <div>
+            <h2>Transferências</h2>
+            <p class="muted">Mover bens entre setores com histórico.</p>
+          </div>
+        </div>
+        <div class="dash-actions">
+          <span class="btn">Realizar Transferência</span>
+        </div>
+      </a>
+  
+    </section>
+  </main>
+
+  <!-- LOGOUT
+       Conecta botão "Sair" com função logout()
+       (definida no global.js)
+  -->
+  <script>
+    document.getElementById("btnSair").addEventListener("click", logout);
+  </script>
+</body>
+</html>

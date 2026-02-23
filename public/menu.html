@@ -1,0 +1,78 @@
+<!-- 
+  Componente: Menu de Navegação (menu.html)
+  -> Centralizar navegação do sistema
+  -> Ser carregado dinamicamente via fetch() em todas as páginas
+  -> Evitar duplicação de código de menu
+-->
+<nav class="menu">
+
+  <!-- =========================
+       DASHBOARD
+       =========================
+       data-page pode ser usado via JS para marcar item ativo
+  -->
+  <a href="dashboard.html" data-page="dashboard">
+    <span class="ico">📊</span> Dashboard
+  </a>
+
+  <!-- =========================
+       BAIXA PATRIMONIAL
+       ========================= -->
+  <a href="baixa.html"><span class="ico">🧯</span> Baixa Patrimonial
+  </a>
+
+   <!-- =========================
+       LISTAGEM DE BENS
+       ========================= -->
+  <a href="bens.html" data-page="bens">
+    <span class="ico">📦</span> Bens
+  </a>
+
+  <!-- =========================
+       CADASTRO DE BEM
+       ========================= -->
+  <a href="cadastro-bens.html" data-page="cadastro-bens">
+    <span class="ico">➕</span> Cadastrar Bem
+  </a>
+
+  <!-- =========================
+       EMPRÉSTIMOS
+       ========================= -->
+  <a href="emprestimos.html" data-page="emprestimos">
+    <span class="ico">🤝</span> Empréstimos
+  </a>
+
+   <!-- =========================
+       RELATÓRIOS
+       ========================= -->
+  <a href="relatorios.html" data-page="relatorios">
+    <span class="ico">🧾</span> Relatórios
+  </a>
+
+   <!-- =========================
+       TRANSFERÊNCIAS
+       ========================= -->
+  <a href="transferencias.html" data-page="transferencias">
+    <span class="ico">🔁</span> Transferências
+  </a>
+
+   <!-- =========================
+       LOGOUT
+       =========================
+       Chama função logout() definida em global.js
+   -->
+  <a href="#" onclick="logout()">
+    <span class="ico">🚪</span> Sair
+  </a>
+
+   <!-- =========================
+       BOTÃO DE TEMA (CLARO/ESCURO)
+       =========================
+       Controlado pelo js/theme.js
+       Normalmente alterna classe no body
+  -->
+  <button class="btn small" id="btnTema" type="button">
+    🌙 Escuro
+  </button>
+
+</nav>

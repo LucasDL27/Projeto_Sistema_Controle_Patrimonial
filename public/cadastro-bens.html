@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!-- 
+  Página: Cadastrar Bem
+  - Registrar um novo item patrimonial no sistema
+  - Vincular o bem a um setor e responsável
+  - Enviar os dados para o backend via JS (cadastro-bens.js)
+-->
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastrar Bem</title>     <!-- Título da aba do navegador -->
+
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js"></script>    <!-- Script responsável pelo tema (claro/escuro) -->
+</head>
+
+<body>
+  <!-- primeiro global.js -->
+  <script src="js/global.js"></script>
+  <script>protegerPagina();</script>
+
+  <!-- =========================
+       TOPBAR / CABEÇALHO
+       ========================= -->
+  <header class="topbar">
+    <div>
+
+       <!-- Título principal -->
+      <h1>Cadastrar Bem</h1>
+      <p class="muted">Registro de item patrimonial</p>  <!-- Descrição curta -->
+    </div>
+    <a class="btn" href="bens.html">Voltar para Bens</a> <!-- Link de retorno para a lista de bens -->
+  </header>
+
+  <main class="container">
+    <section class="card pad">
+      <h2>Dados do bem</h2>
+
+      <!-- mantém IDs para seu backend/JS -->
+      <div class="form">
+
+        <!-- Linha 1: Nº Patrimônio + Valor --> 
+        <div class="row">
+          <div>
+
+            <!-- Nº Patrimônio / Plaqueta -->
+            <label>Nº Patrimônio</label>
+            <input id="numero" placeholder="PAT-0001" />
+          </div>
+
+          <div>
+              <!-- Valor de aquisição -->
+            <label>Valor (R$)</label>
+            <input id="valor" type="number" step="0.01" placeholder="3500.00" />
+          </div>
+        </div>
+
+        <label>Descrição</label>      <!-- Descrição -->
+        <input id="descricao" placeholder="Ex: Notebook Dell" />
+
+         <!-- Linha 2: Data + Setor -->
+        <div class="row">
+          <div>
+
+             <!-- Data de aquisição -->
+            <label>Data aquisição</label>   
+            <input id="data" type="date" />
+          </div>
+
+          <div>
+
+              <!-- 
+              Setor do bem
+              Select populado via JS com os setores cadastrados
+            -->
+            <label>Setor</label>
+            <select id="setor_id"></select>
+          </div>
+        </div>
+
+            <!-- 
+          Responsável do bem
+          Populado via JS (normalmente filtrado pelo setor)
+        -->
+        <label>Responsável</label>
+        <select id="responsavel_id"></select>
+
+           <!-- Botões de ação -->
+        <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
+
+          <!-- 
+            Botão salvar:
+            type="button" para não tentar submeter form automaticamente
+            O clique é tratado no cadastro-bens.js
+          -->
+          <button class="btn primary" id="btnSalvar" type="button">Salvar</button>
+
+          <!-- Logout do sistema (função está no global.js) -->
+          <button class="btn danger" type="button" onclick="logout()">Sair</button>
+        </div>
+
+         <!-- Mensagens/retorno do backend (debug/feedback) -->
+        <p class="muted" id="msg" style="margin-top:10px;"></p>
+      </div>
+    </section>
+  </main>
+
+  <!--Carrega menu.html para evitar duplicar o menu em várias telas
+       (mesma estratégia das outras páginas do sistema -->
+  <script>
+    fetch("menu.html")
+      .then(r => r.text())
+      .then(html => document.body.insertAdjacentHTML("afterbegin", html));
+  </script>
+
+    <!-- Script específico da tela de cadastro (carrega setores, responsáveis e faz POST /bens) -->
+  <script src="js/cadastro-bens.js"></script>
+</body>
+</html>

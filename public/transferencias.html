@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!-- 
+  Página: Transferências
+  Objetivo:
+  -> Registrar transferência de um bem entre setores
+  -> Atualizar setor/responsável do bem no backend
+  -> Manter histórico da transferência (origem -> destino + motivo)
+-->
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Transferências</title>     <!-- Título da aba -->
+  <link rel="stylesheet" href="css/style.css">  <!-- Título da aba -->
+  <script src="js/theme.js"></script>      <!-- Script de tema (claro/escuro) -->
+</head>
+<body>
+  <!-- primeiro global.js -->
+  <script src="js/global.js"></script>
+  <script>protegerPagina();</script>
+
+  <header class="topbar">
+    <div>
+      <h1>Transferências</h1>    <!-- Título principal -->
+      <p class="muted">Mover bens entre setores</p>     <!-- Descrição curta do módulo -->
+    </div>
+
+     <!-- Voltar para dashboard -->
+    <a class="btn" href="dashboard.html">Voltar</a>
+  </header>
+
+  <!-- =========================
+       CONTEÚDO PRINCIPAL
+       ========================= -->
+  <main class="container">
+    <section class="card pad">
+      <h2>Nova Transferência</h2>
+
+       <!-- Entrada principal: plaqueta -->
+      <form id="formTransferencia" class="form">
+        <label>Plaqueta do bem (nº patrimônio)</label>
+
+        <!-- Linha: input + botão buscar -->
+        <div class="row">
+          <div style="flex:1">
+            <input id="plaqueta" placeholder="Ex: PAT-0001" required />
+          </div>
+
+           <!-- Botão de busca (não submete form) -->
+          <div>
+            <button class="btn" id="btnBuscar" type="button">Buscar</button>
+          </div>
+        </div>
+
+        <!-- 
+          Exibe informações do bem após busca:
+          - número patrimônio
+          - descrição
+          - status
+          Preenchido via JS
+        -->
+        <p class="muted" id="bemInfo"></p>
+
+         <!-- Linha: setor origem / setor destino -->
+        <div class="row">
+          <div>
+             <!-- Origem é informativo, vem do bem encontrado (por isso disabled) -->
+            <label>Setor origem</label>
+            <select id="setorOrigemId" disabled></select>
+          </div>
+
+          <div>
+             <!-- Destino é escolhido pelo usuário -->
+            <label>Setor destino</label>
+            <select id="setorDestinoId" required></select>
+          </div>
+        </div>
+
+        <!-- Linha: responsável origem / responsável destino -->
+        <div class="row">
+          <div>
+
+             <!-- Origem informativo (vem do bem encontrado) -->
+            <label>Responsável (origem)</label>
+            <select id="respOrigemId" disabled></select>
+          </div>
+
+          <div>
+
+             <!-- Destino escolhido pelo usuário -->
+            <label>Responsável (destino)</label>
+            <select id="respDestinoId" required></select>
+          </div>
+        </div>
+
+         <!-- Motivo (opcional, mas recomendado para histórico) -->
+        <label>Motivo</label>
+        <input id="motivo" placeholder="Ex: Mudança de setor / realocação" />
+
+        <!-- Submit do form (JS intercepta e faz POST /transferencias) -->
+        <button class="btn primary" type="submit">Registrar Transferência</button>
+        <p class="muted" id="msg"></p>   <!-- Mensagens/erros deste módulo -->
+      </form>
+    </section>
+  </main>
+
+  <!--menu (sem scripts de páginas dentro do menu.html!) -->
+  <script>
+    fetch("menu.html")
+      .then(r => r.text())
+      .then(html => document.body.insertAdjacentHTML("afterbegin", html));
+  </script>
+
+ <!-- Script específico do módulo de transferências (carregar combos + POST) -->
+  <script src="js/transferencias.js"></script>
+</body>
+</html>

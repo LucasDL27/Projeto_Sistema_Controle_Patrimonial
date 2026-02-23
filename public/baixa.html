@@ -1,0 +1,156 @@
+<!doctype html>
+<!-- 
+  Página de Baixa Patrimonial
+  Permitir registrar a baixa de um bem SEM excluir do banco.
+  Apenas altera status para BAIXADO e grava no histórico.
+-->
+
+<html lang="pt-br">
+<head>
+  
+  <!-- Configuração básica de caracteres -->
+  <meta charset="UTF-8" />
+
+  <!-- Responsividade (essencial para funcionar bem em mobile) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Título da aba do navegador -->
+  <title>Baixa Patrimonial</title>
+
+    <!-- CSS principal do sistema -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Script responsável por alternância de tema (claro/escuro) -->
+  <script src="js/theme.js"></script>
+</head>
+<body>
+
+  <!-- 
+    Script global:
+    Contém funções reutilizáveis como:
+    -> protegerPagina()
+    -> logout()
+    -> API_BASE
+  -->
+  <script src="js/global.js"></script>
+    
+  <!-- 
+    Proteção da página:
+    Se não tiver token no localStorage, redireciona para login.
+    Segurança de front (backend também valida JWT).
+  -->
+  <script>protegerPagina();</script>
+
+<!-- =========================
+       HEADER SUPERIOR
+       ========================= -->
+  <header class="topbar">
+    <div>
+
+        <!-- Título principal da página -->
+      <h1>Baixa Patrimonial</h1>
+
+      <!-- Subtítulo explicativo -->
+      <p class="muted">Registro de baixa (sem excluir o bem)</p>
+    </div>
+     <!-- Botão de retorno para dashboard -->
+    <a class="btn" href="dashboard.html">Voltar</a>
+  </header>
+
+   <!-- =========================
+       CONTEÚDO PRINCIPAL
+       ========================= -->
+  <main class="container">
+
+     <!-- Card visual para organizar o formulário -->
+    <section class="card pad">
+      <h2>Registrar Baixa</h2>
+
+        <!-- 
+        Formulário principal
+        - id usado no JS (baixa.js)
+        - type="submit" será interceptado via JS
+      -->
+       <form id="formBaixa" class="form">
+
+          <!-- Campo para digitar plaqueta -->
+        <label>Plaqueta do bem (nº patrimônio)</label>
+
+          <!-- Linha com input + botão lado a lado -->
+        <div class="row">
+
+             <!-- Campo de entrada -->
+          <div style="flex:1">
+            <input id="plaqueta" placeholder="Ex: PAT-0001" required />
+          </div>
+
+           <!-- Botão para buscar o bem -->
+          <div>
+            <button class="btn" id="btnBuscar" type="button">Buscar</button>
+          </div>
+        </div>
+
+           <!-- 
+          Área onde será exibido:
+          - número patrimônio
+          - descrição
+          - status atual
+          Preenchido dinamicamente via JS
+        -->
+        <p class="muted" id="bemInfo"></p>
+
+        <div class="row">     <!-- Linha com data e tipo -->
+          <div>
+            <label>Data da baixa</label>    <!-- Data da baixa -->
+            <input type="date" id="dataBaixa" required />   
+          </div>
+
+          <div>
+            <label>Tipo</label>   <!-- Tipo da baixa -->
+            <select id="tipo" required>
+              <option value="" disabled selected>Selecione</option>
+              <option value="DOACAO">Doação</option>
+              <option value="VENDA">Venda</option>
+              <option value="SUCATA">Sucata</option>
+              <option value="EXTRAVIO">Extravio</option>
+              <option value="INUTILIZACAO">Inutilização</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Motivo (opcional)</label>     <!-- Campo opcional -->
+        <input id="motivo" placeholder="Ex: Obsoleto / Danificado / Outro" />
+
+        <label>Descrição do motivo (opcional)</label>    <!-- Campo opcional mais detalhado -->
+        <input id="descricaoMotivo" placeholder="Detalhes da baixa (se necessário)" />
+
+         <!-- Botão principal de confirmação -->
+        <button class="btn primary" type="submit">Confirmar Baixa</button>
+
+          <!-- 
+          Área de mensagem dinâmica:
+          - sucesso
+          - erro
+          - validações
+        -->
+        <p class="muted" id="msg"></p>
+      </form>
+    </section>
+  </main>
+
+
+  <!-- =========================
+       MENU DINÂMICO
+       =========================
+       Carrega menu.html dinamicamente
+       Isso evita repetir código de menu em todas as páginas
+  -->
+  <script>
+    fetch("menu.html")
+      .then(r => r.text())
+      .then(html => document.body.insertAdjacentHTML("afterbegin", html));
+  </script>
+<!-- Script específico da lógica de baixa -->
+  <script src="js/baixa.js"></script>
+</body>
+</html>

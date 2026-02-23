@@ -1,0 +1,158 @@
+<!doctype html>
+<!-- 
+  Página: Empréstimos
+  -> Registrar retirada de bens (empréstimo)
+  -> Registrar devolução
+  -> Listar empréstimos em aberto/atrasados
+-->
+
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Empréstimos</title>    <!-- Título da aba do navegador -->
+
+  <!-- CSS global do sistema -->
+  <link rel="stylesheet" href="css/style.css">
+ 
+  <!-- Script responsável por alternância de tema -->
+  <script src="js/theme.js"></script>
+</head>
+<body>
+   <!-- 
+    Script global:
+    - protegerPagina()
+    - logout()
+    - API_BASE
+    - funções comuns do sistema
+  --> 
+  <script src="js/global.js"></script>
+
+   <!-- Protege a rota no front: se não tiver token, volta pro login -->
+  <script>protegerPagina();</script>
+
+ <!-- Header/Topbar-->
+  <header class="topbar">
+    <div>
+      <h1>Empréstimos</h1>  <!-- Título da tela -->
+      <p class="muted">Retirada e devolução de bens</p>   <!-- Descrição curta -->
+    </div>
+
+    <!-- Voltar para dashboard -->
+    <a class="btn" href="dashboard.html">Voltar</a>
+  </header>
+
+  <main class="container">
+
+     <!-- =========================
+         CARD: NOVO EMPRÉSTIMO
+         ========================= -->
+    <section class="card pad">
+      <h2>Novo Empréstimo</h2>
+
+      <!-- 
+        Formulário de empréstimo
+        IDs são usados no JS:
+        -> formEmprestimo: intercepta submit
+        -> bemId / colaborador_id: selects carregados pela API
+      -->
+      <form id="formEmprestimo" class="form">
+
+         <!-- Select de bens (JS filtra para mostrar apenas bens ATIVOS) -->
+        <label>Bem</label>
+        <select id="bemId" required></select>
+
+        <!-- Linha: colaborador + CPF opcional -->
+        <div class="row">
+          <div>
+
+              <!-- Select de colaboradores (carregado da API) -->
+            <label>Colaborador</label>
+            <select id="colaborador_id" required></select>
+          </div>
+          <div>
+
+              <!-- CPF é opcional-->
+            <label>CPF (opcional)</label>
+            <input id="cpf" placeholder="000.000.000-00" />
+          </div>
+        </div>
+
+        <!-- Linha: datas -->
+        <div class="row">
+          <div>
+
+             <!-- Data da saída (o JS normalmente seta hoje como padrão) -->
+            <label>Data saída</label>
+            <input type="date" id="dataSaida" required />
+          </div>
+          <div>
+
+             <!-- Data prevista (opcional) -->
+            <label>Prevista devolução (opcional)</label>
+            <input type="date" id="dataPrevista" />
+          </div>
+        </div>
+
+        <!-- Observação/termo -->
+        <label>Termo/observação (opcional)</label>
+        <input id="termo" placeholder="Ex: Termo assinado / número do documento" />
+
+         <!-- Botão de submit (tratado no JS) -->
+        <button class="btn primary" type="submit">Registrar Empréstimo</button>
+        <p class="muted" id="msgNovo"></p>
+      </form>
+    </section>
+
+     <!-- =========================
+         CARD: EMPRÉSTIMOS EM ABERTO
+         ========================= -->
+    <section class="card pad">
+      <h2>Empréstimos em aberto</h2>
+
+      <!-- Botão para atualizar listagem sem recarregar a página -->
+      <div class="row">
+        <button class="btn" id="btnRecarregar" type="button">Recarregar</button>
+      </div>
+
+       <!-- Tabela da listagem -->
+      <div class="table-wrap">
+        <table class="table" id="tblAbertos">
+          <thead>
+            <tr>
+              <th>Bem</th>
+              <th>Colaborador</th>
+              <th>Saída</th>
+              <th>Prevista</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+
+          <!-- 
+            tbody preenchido dinamicamente via JS
+            (emprestimos.js monta linhas e inclui botão "Devolver")
+          -->
+          <tbody></tbody>
+        </table>
+      </div>
+
+         <!-- Mensagem específica da listagem -->
+      <p class="muted" id="msgAbertos"></p>
+    </section>
+  </main>
+
+  <!-- =============
+       MENU DINÂMICO
+       =============
+       Carrega menu.html para reutilizar o mesmo menu em todas as telas
+  -->
+  <script>
+    fetch("menu.html")
+      .then(r => r.text())
+      .then(html => document.body.insertAdjacentHTML("afterbegin", html));
+  </script>
+
+  <!-- Script principal da tela (carrega selects, lista abertos e registra/devolve) -->
+  <script src="js/emprestimos.js"></script>
+</body>
+</html>

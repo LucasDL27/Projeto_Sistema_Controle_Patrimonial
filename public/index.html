@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!-- 
+  Página: Login - Controle Patrimonial
+  -> Autenticar o usuário no sistema
+  -> Enviar email/senha para o backend (POST /auth/login)
+  -> Salvar token JWT no localStorage e redirecionar para o dashboard
+  Observação:
+  A lógica fica no arquivo js/login.js
+-->
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Controle Patrimonial</title>   <!-- Título da aba do navegador -->
+
+  <link rel="stylesheet" href="css/style.css">  <!-- CSS global do sistema (inclui estilos do login também) -->
+  
+  <!-- Script do tema (claro/escuro) -->
+  <script src="js/theme.js"></script>
+</head>
+
+<!-- Classe específica para layout do login (fundo, centralização, etc.) -->
+<body class="login-body">
+
+   <!-- 
+    Overlay de fundo:
+    Usado para dar efeito visual (escurecer / blur / camada sobre imagem)
+  -->
+  <div class="login-overlay"></div>
+
+  <div class="login-container">    <!-- Container central do login -->
+    <div class="login-card">       <!-- Card principal do login -->
+      <h2 class="login-title"><span>Controle Patrimonial</span></h2>      <!-- Título do sistema -->
+      <p class="muted">Acesse o sistema</p>    <!-- Subtítulo -->
+
+      <form id="formLogin" class="form">
+        
+        <!-- Campo de email (validação do navegador por type="email") -->
+        <label>Email</label>
+        <input id="email" type="email" placeholder="admin@patrimonio.com" required>
+      
+         <!-- Campo de senha com botão para mostrar/ocultar -->
+        <label>Senha</label>
+        <div class="pass-wrap">
+
+           <!-- Input senha -->
+          <input id="senha" type="password" placeholder="••••••••" required>
+
+          <!-- 
+            Toggle de senha:
+            Elemento clicável para alternar entre password/text
+            (implementado no login.js)
+          -->
+          <span class="toggle-eye" id="btnToggleSenha" title="Mostrar senha">
+            👁
+          </span>
+        </div>
+      
+        <!-- BOTÃO ENTRAR -->
+        <button id="btnLogin" class="btn login-btn" type="button">
+          Entrar
+        </button>
+      
+        <p id="msg" class="muted"></p>    <!-- Mensagens dinâmicas: erro de login, validações, etc. -->
+      
+      </form>
+    </div>
+  </div>
+  
+  <!-- Script específico do login (POST, salvar token, toggle senha) -->
+  <script src="js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<!-- 
+  Página: Bens (Controle Patrimonial)
+  Objetivo:
+  - Listar todos os bens cadastrados
+  - Permitir filtro por texto e por status
+  - Acessar cadastro de bem e editar descrição (via JS)
+-->
+
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bens - Controle Patrimonial</title>     <!-- Título exibido na aba do navegador -->
+
+  <link rel="stylesheet" href="css/style.css">    <!-- CSS global do sistema -->
+  <script src="js/theme.js"></script>             <!-- Script responsável por tema (claro/escuro) -->
+</head>
+
+<body>
+  <script src="js/global.js"></script>
+  <script>protegerPagina();</script>
+
+  <!-- =========================
+       TOPBAR / CABEÇALHO
+       ========================= -->
+  <header class="topbar">
+    <div>
+      <h1>Bens</h1>              <!-- Título da página -->
+
+       <!-- Descrição curta da funcionalidade -->
+      <p class="muted">Lista e gerenciamento do patrimônio</p>
+    </div>
+
+     <!-- Ações rápidas no cabeçalho -->
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+       
+      <!-- Vai para a tela de cadastro -->
+      <a class="btn primary" href="cadastro-bens.html">+ Cadastrar Bem</a>
+       
+      <!-- Vai para a tela de cadastro -->
+      <a class="btn" href="dashboard.html">Voltar</a>
+    </div>
+  </header>
+
+   <!-- =========================
+       CONTEÚDO PRINCIPAL
+       ========================= -->
+  <main class="container">
+    <section class="card pad">
+      <h2>Filtros</h2>
+
+      <!-- Mantém IDs para o seu JS -->
+      <div class="form">
+        <div class="row" style="align-items:end;">
+
+          <!-- Campo de busca (patrimônio ou descrição) -->
+          <div style="flex: 2;">
+            <label>Buscar</label>
+            <input id="busca" placeholder="Buscar por patrimônio ou descrição" />
+          </div>
+
+          <!-- Select de status (ATIVO/EMPRESTADO/BAIXADO) -->
+          <div style="flex: 1;">
+            <label>Status</label>
+            <select id="filtroStatus">
+              <option value="">(Todos)</option>
+              <option value="ATIVO">ATIVO</option>
+              <option value="EMPRESTADO">EMPRESTADO</option>
+              <option value="BAIXADO">BAIXADO</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <hr />      <!-- Separador visual -->
+
+
+      <!-- =========================
+           LISTA DE BENS
+           ========================= -->
+      <h2>Lista de Bens</h2>
+
+       <!-- Mensagens de carregamento/erro/sucesso (preenchidas via JS) -->
+      <p class="muted" id="msg"></p>
+
+       <!-- Wrapper para permitir scroll horizontal em telas pequenas -->
+      <div class="table-wrap">
+        <table class="table">
+
+          <!-- Cabeçalho fixo da tabela -->
+          <thead>
+            <tr>
+              <th>Número</th>
+              <th>Descrição</th>
+              <th>Valor</th>
+              <th>Status</th>
+              <th>Setor</th>
+              <th>Responsável</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+
+            <!-- Corpo dinâmico:
+            Será preenchido pelo JS (bens.js) com a lista vinda da API -->
+          <tbody id="tabelaBens"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Menu igual Transferências/Empréstimos -->
+  <script>
+    fetch("menu.html")
+      .then(r => r.text())
+      .then(html => document.body.insertAdjacentHTML("afterbegin", html));
+  </script>
+
+  <!-- Script específico da tela de bens (filtros, render, editar, carregar) -->
+  <script src="js/bens.js"></script>
+</body>
+</html>
