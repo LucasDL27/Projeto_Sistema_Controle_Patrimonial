@@ -307,4 +307,94 @@ Separação clara entre frontend e backend
 
 O projeto demonstra aplicação prática dos conceitos de desenvolvimento web, segurança, integração com banco de dados e organização estrutural de aplicações modernas.
 
+ # 🚀 Instalação e Execução
+Este guia explica como executar o Sistema de Controle Patrimonial em qualquer computador.
+
+ ## ✅ Pré-requisitos
+Antes de iniciar, certifique-se de ter instalado:
+Node.js 18+
+MySQL 8+ (ou MariaDB compatível)
+Git (Opcional) MySQL Workbench ou phpMyAdmin
+
+###📥 1. Clonar o Repositório
+Abra o terminal e execute:
+git clone https://github.com/LucasDL27/Projeto_Sistema_Controle_Patrimonial.git
+cd Projeto_Sistema_Controle_Patrimonial
+
+
+###📦 2. Instalar Dependências do Backend
+Entre na pasta do backend:
+cd server
+npm install
+Esse comando instalará todas as dependências do projeto (Express, MySQL, JWT, Bcrypt, etc.).
+
+###⚙️ 3. Configurar Variáveis de Ambiente (.env)
+Dentro da pasta server, crie um arquivo chamado:
+.env
+Adicione o seguinte conteúdo:
+PORT=3000
+JWT_SECRET=coloque_uma_chave_super_secreta_aqui
+
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=sua_senha_mysql_aqui
+DB_NAME=controle_patrimonial
+DB_PORT=3306
+###🔐 Importante:
+Substitua sua_senha_mysql pela senha do seu MySQL.
+
+Utilize uma chave forte no JWT_SECRET (mínimo 32 caracteres).
+
+Exemplo:
+JWT_SECRET=83hd83hfd83hfd83hfd83hfd83hfd83hf
+
+###🗄️ 4. Configurar o Banco de Dados
+Abra o MySQL (Workbench, terminal ou phpMyAdmin).
+4.1 Criar o banco:
+CREATE DATABASE controle_patrimonial;
+4.2 Executar o Script SQL
+Se houver um arquivo como:
+database.sql
+ou
+schema.sql
+Execute no terminal:
+mysql -u root -p controle_patrimonial < database.sql
+Ou copie e cole o conteúdo do arquivo SQL no MySQL Workbench.
+
+###👤 5. Criar Usuário Administrador
+Execute no MySQL:
+INSERT INTO usuarios (nome, email, senha_hash, perfil, ativo)
+VALUES (
+ 'Administrador',
+ 'admin@patrimonio.com',
+ '$2a$10$COLE_AQUI_UM_HASH_BCRYPT_VALIDO',
+ 'ADMIN',
+ 1
+);
+
+###🔑 Gerar Hash da Senha (bcrypt)
+No terminal, dentro da pasta server, execute:
+node -e "const bcrypt=require('bcryptjs'); bcrypt.hash('123456',10).then(console.log)"
+Copie o hash gerado e substitua no comando SQL acima.
+
+###▶️ 6. Executar o Backend
+Ainda dentro da pasta server, execute:
+npm start
+Ou, se utilizar nodemon:
+npm run dev
+A API estará disponível em:
+http://localhost:3000/api
+
+###🌐 7. Acessar o Sistema
+Se o frontend estiver configurado dentro do backend:
+Abra no navegador:
+http://localhost:3000
+
+###🔐 Primeiro Login
+Utilize:
+Email: admin@patrimonio.com
+Senha: 123456/
+(ou a senha que você definiu ao gerar o hash)
+
+
 
