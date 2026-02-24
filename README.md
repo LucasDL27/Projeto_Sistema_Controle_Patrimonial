@@ -3,7 +3,7 @@ Projeto referente a disciplina CSI606 - Sistemas Web.
 
 Projeto desenvolvido para a disciplina de Sistemas Web, com foco na construção de uma aplicação completa utilizando arquitetura cliente-servidor, autenticação segura e banco de dados relacional.
 
-# SISTEMA DE CONTROLE PATRIMONIAL
+  # SISTEMA DE CONTROLE PATRIMONIAL
 ### Resumo
 
 O presente trabalho apresenta o desenvolvimento de um Sistema Web de Controle Patrimonial, voltado ao gerenciamento de bens móveis de uma instituição.
