@@ -316,19 +316,19 @@ Node.js 18+
 MySQL 8+ (ou MariaDB compatível)
 Git (Opcional) MySQL Workbench ou phpMyAdmin
 
-###📥 1. Clonar o Repositório
+ ## 📥 1. Clonar o Repositório
 Abra o terminal e execute:
 git clone https://github.com/LucasDL27/Projeto_Sistema_Controle_Patrimonial.git
 cd Projeto_Sistema_Controle_Patrimonial
 
 
-###📦 2. Instalar Dependências do Backend
+## 📦 2. Instalar Dependências do Backend
 Entre na pasta do backend:
 cd server
 npm install
 Esse comando instalará todas as dependências do projeto (Express, MySQL, JWT, Bcrypt, etc.).
 
-###⚙️ 3. Configurar Variáveis de Ambiente (.env)
+## ⚙️ 3. Configurar Variáveis de Ambiente (.env)
 Dentro da pasta server, crie um arquivo chamado:
 .env
 Adicione o seguinte conteúdo:
@@ -348,7 +348,7 @@ Utilize uma chave forte no JWT_SECRET (mínimo 32 caracteres).
 Exemplo:
 JWT_SECRET=83hd83hfd83hfd83hfd83hfd83hfd83hf
 
-###🗄️ 4. Configurar o Banco de Dados
+## 🗄️ 4. Configurar o Banco de Dados
 Abra o MySQL (Workbench, terminal ou phpMyAdmin).
 4.1 Criar o banco:
 CREATE DATABASE controle_patrimonial;
@@ -361,7 +361,7 @@ Execute no terminal:
 mysql -u root -p controle_patrimonial < database.sql
 Ou copie e cole o conteúdo do arquivo SQL no MySQL Workbench.
 
-###👤 5. Criar Usuário Administrador
+## 👤 5. Criar Usuário Administrador
 Execute no MySQL:
 INSERT INTO usuarios (nome, email, senha_hash, perfil, ativo)
 VALUES (
@@ -372,12 +372,12 @@ VALUES (
  1
 );
 
-###🔑 Gerar Hash da Senha (bcrypt)
+## 🔑 Gerar Hash da Senha (bcrypt)
 No terminal, dentro da pasta server, execute:
 node -e "const bcrypt=require('bcryptjs'); bcrypt.hash('123456',10).then(console.log)"
 Copie o hash gerado e substitua no comando SQL acima.
 
-###▶️ 6. Executar o Backend
+## ▶️ 6. Executar o Backend
 Ainda dentro da pasta server, execute:
 npm start
 Ou, se utilizar nodemon:
@@ -385,12 +385,12 @@ npm run dev
 A API estará disponível em:
 http://localhost:3000/api
 
-###🌐 7. Acessar o Sistema
+## 🌐 7. Acessar o Sistema
 Se o frontend estiver configurado dentro do backend:
 Abra no navegador:
 http://localhost:3000
 
-###🔐 Primeiro Login
+## 🔐 Primeiro Login
 Utilize:
 Email: admin@patrimonio.com
 Senha: 123456/
